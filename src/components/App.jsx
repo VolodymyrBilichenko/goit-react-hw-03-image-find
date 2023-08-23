@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { Container } from './Container/Container';
 import { getAllImages } from 'Api/imagesApi';
 import { GlobalStyle } from './GlobalStyle/GlobalStyles.styled';
+import { Searchbar } from './Searchbar/Searchbar';
 
 export class App extends Component {
   state = {
@@ -14,18 +15,33 @@ export class App extends Component {
     searchQuery: '',
   };
 
-  componentDidMount() {
-    this.hendleImages();
+  componentDidUpdate(prevProps, prevState) {
+    const { page, searchQuery } = this.state;
+
+    if (prevState.page !== page || prevState.searchQuery !== searchQuery) {
+      this.handleImages(searchQuery, page);
+    }
   }
 
-  hendleImages = async () => {
+  handleImages = async () => {
     const { page, perPage, searchQuery } = this.state;
     try {
       const data = await getAllImages(searchQuery, page, perPage);
       console.log(data);
+      if (page === 1) {
+        this.setState({ images: data.hits });
+      } else {
+        this.setState(set => ({
+          images: [...set.images, ...data.hits],
+        }));
+      }
     } catch (error) {
       this.setState({ error: error.message, isLoading: false });
     }
+  };
+
+  handleSearch = searchQuery => {
+    this.setState({ searchQuery, page: 1, images: [] });
   };
 
   render() {
@@ -33,6 +49,7 @@ export class App extends Component {
     return (
       <>
         <GlobalStyle />
+        <Searchbar onSubmit={this.handleSearch} />
         <Container></Container>
       </>
     );
