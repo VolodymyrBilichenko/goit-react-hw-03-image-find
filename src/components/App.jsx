@@ -1,13 +1,17 @@
 import { Component } from 'react';
 import { Container } from './Container/Container';
 import { getAllImages } from 'Api/imagesApi';
-import { GlobalStyle } from './GlobalStyles.styled';
+import { GlobalStyle } from './GlobalStyle/GlobalStyles.styled';
 
 export class App extends Component {
   state = {
     images: [],
     error: '',
     // isLoading: false,
+
+    page: 1,
+    perPage: 12,
+    searchQuery: '',
   };
 
   componentDidMount() {
@@ -15,10 +19,9 @@ export class App extends Component {
   }
 
   hendleImages = async () => {
+    const { page, perPage, searchQuery } = this.state;
     try {
-      // this.setState({ isLoading: true });
-      const data = await getAllImages();
-      this.setState({ images: data.images, isLoading: false });
+      const data = await getAllImages(searchQuery, page, perPage);
       console.log(data);
     } catch (error) {
       this.setState({ error: error.message, isLoading: false });
