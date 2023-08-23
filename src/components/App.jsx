@@ -1,10 +1,12 @@
-import { getAllImages } from 'Api/imagesApi';
 import { Component } from 'react';
+import { Container } from './Container/Container';
+import { getAllImages } from 'Api/imagesApi';
+import { GlobalStyle } from './GlobalStyles.styled';
 
 export class App extends Component {
   state = {
     images: [],
-    // error: '',
+    error: '',
     // isLoading: false,
   };
 
@@ -14,7 +16,7 @@ export class App extends Component {
 
   hendleImages = async () => {
     try {
-      this.setState({ isLoading: true });
+      // this.setState({ isLoading: true });
       const data = await getAllImages();
       this.setState({ images: data.images, isLoading: false });
       console.log(data);
@@ -25,6 +27,11 @@ export class App extends Component {
 
   render() {
     const { error, images, isLoading } = this.state;
-    return <div>React homework template</div>;
+    return (
+      <>
+        <GlobalStyle />
+        <Container></Container>
+      </>
+    );
   }
 }
