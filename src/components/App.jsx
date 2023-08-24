@@ -3,6 +3,8 @@ import { Container } from './Container/Container';
 import { getAllImages } from 'Api/imagesApi';
 import { GlobalStyle } from './GlobalStyle/GlobalStyles.styled';
 import { Searchbar } from './Searchbar/Searchbar';
+import { ImageGallery } from './ImageGallery/ImageGallery';
+import { NotFound } from './NotFound/NotFound';
 
 export class App extends Component {
   state = {
@@ -13,6 +15,8 @@ export class App extends Component {
     page: 1,
     perPage: 12,
     searchQuery: '',
+
+    hasSearched: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -41,16 +45,19 @@ export class App extends Component {
   };
 
   handleSearch = searchQuery => {
-    this.setState({ searchQuery, page: 1, images: [] });
+    this.setState({ searchQuery, page: 1, images: [], hasSearched: true });
   };
 
   render() {
-    const { error, images, isLoading } = this.state;
+    const { images, hasSearched } = this.state;
     return (
       <>
         <GlobalStyle />
         <Searchbar onSubmit={this.handleSearch} />
-        <Container></Container>
+        <Container>
+          <ImageGallery imagesLi={images} />
+          {hasSearched && images.length === 0 && <NotFound />}
+        </Container>
       </>
     );
   }
