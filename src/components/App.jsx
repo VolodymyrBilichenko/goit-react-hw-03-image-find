@@ -6,6 +6,7 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { NotFound } from './NotFound/NotFound';
 import { LoadMore } from './LoadMore/LoadMore';
+import { Loading } from './Loading/Loading';
 
 export class App extends Component {
   state = {
@@ -67,7 +68,7 @@ export class App extends Component {
     return (
       <>
         <GlobalStyle />
-        {isLoading && <h2>Loading.....</h2>}
+        {isLoading && <Loading />}
         <Searchbar onSubmit={this.handleSearch} />
         <Container>
           <ImageGallery imagesLi={images} />
