@@ -17,6 +17,7 @@ export class App extends Component {
     searchQuery: '',
 
     hasSearched: false,
+    showNotFound: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -39,6 +40,12 @@ export class App extends Component {
           images: [...set.images, ...data.hits],
         }));
       }
+
+      if (data.hits.length === 0) {
+        this.setState({ showNotFound: true });
+      } else {
+        this.setState({ showNotFound: false });
+      }
     } catch (error) {
       this.setState({ error: error.message, isLoading: false });
     }
@@ -49,14 +56,14 @@ export class App extends Component {
   };
 
   render() {
-    const { images, hasSearched } = this.state;
+    const { images, hasSearched, showNotFound } = this.state;
     return (
       <>
         <GlobalStyle />
         <Searchbar onSubmit={this.handleSearch} />
         <Container>
           <ImageGallery imagesLi={images} />
-          {hasSearched && images.length === 0 && <NotFound />}
+          {hasSearched && showNotFound && <NotFound />}
         </Container>
       </>
     );
