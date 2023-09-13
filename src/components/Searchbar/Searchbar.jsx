@@ -1,7 +1,9 @@
 import { Component } from 'react';
-import { HeaderSearchbarStye } from './Searchbar.styled';
+import { HeaderSearchBarStye } from './Searchbar.styled';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export class Searchbar extends Component {
+export class SearchBar extends Component {
   state = {
     searchQuery: '',
   };
@@ -12,6 +14,11 @@ export class Searchbar extends Component {
 
   handleSubmit = evt => {
     evt.preventDefault();
+
+    if (this.state.searchQuery.trim() === '') {
+      toast.info('Please fill in the input field');
+      return;
+    }
 
     this.props.onSubmit(this.state.searchQuery);
 
@@ -24,23 +31,38 @@ export class Searchbar extends Component {
 
   render() {
     return (
-      <HeaderSearchbarStye className="searchbar">
-        <form className="form" role="search" onSubmit={this.handleSubmit}>
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
-          </button>
+      <div>
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
 
-          <input
-            className="input"
-            type="search"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.handelInput}
-            value={this.state.searchQuery}
-          />
-        </form>
-      </HeaderSearchbarStye>
+        <HeaderSearchBarStye className="searchar">
+          <form className="form" role="search" onSubmit={this.handleSubmit}>
+            <button type="submit" className="button">
+              <span className="button-label">Search</span>
+            </button>
+
+            <input
+              className="input"
+              type="search"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
+              onChange={this.handelInput}
+              value={this.state.searchQuery}
+            />
+          </form>
+        </HeaderSearchBarStye>
+      </div>
     );
   }
 }

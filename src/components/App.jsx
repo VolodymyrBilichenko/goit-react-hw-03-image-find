@@ -2,23 +2,23 @@ import { Component } from 'react';
 import { Container } from './Container/Container';
 import { getAllImages } from 'Api/imagesApi';
 import { GlobalStyle } from './GlobalStyle/GlobalStyles.styled';
-import { Searchbar } from './Searchbar/Searchbar';
+import { SearchBar } from './SearchBar/SearchBar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { NotFound } from './NotFound/NotFound';
 import { LoadMore } from './LoadMore/LoadMore';
 import { Loading } from './Loading/Loading';
+import { toast } from 'react-toastify';
 
 export class App extends Component {
   state = {
     images: [],
     error: '',
-    isLoading: false,
 
     page: 1,
     perPage: 12,
     searchQuery: '',
 
-    hasSearched: false,
+    isLoading: false,
     showNotFound: false,
   };
 
@@ -56,7 +56,18 @@ export class App extends Component {
   };
 
   handleSearch = searchQuery => {
-    this.setState({ searchQuery, page: 1, images: [], hasSearched: true });
+    if (
+      this.state.searchQuery.toLowerCase().trim() ===
+      searchQuery.toLowerCase().trim()
+    ) {
+      return toast.warn(`You are already viewing ${searchQuery}`);
+    }
+
+    this.setState({
+      searchQuery: searchQuery.toLowerCase().trim(),
+      page: 1,
+      images: [],
+    });
   };
 
   onLoadMore = () => {
@@ -69,12 +80,17 @@ export class App extends Component {
       <>
         <GlobalStyle />
         {isLoading && <Loading />}
-        <Searchbar onSubmit={this.handleSearch} />
+        <SearchBar onSubmit={this.handleSearch} />
         <Container>
           <ImageGallery imagesLi={images} />
           {hasSearched && showNotFound && <NotFound />}
 
-          <LoadMore onClick={this.onLoadMore} />
+          {images.length > 0 && (
+            <LoadMore
+              onClick={this.onLoadMore}
+              isVisible={!this.state.isLoading}
+            />
+          )}
         </Container>
       </>
     );
