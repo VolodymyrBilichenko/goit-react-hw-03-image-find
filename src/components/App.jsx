@@ -75,7 +75,7 @@ export class App extends Component {
   };
 
   render() {
-    const { images, hasSearched, showNotFound, isLoading } = this.state;
+    const { images, showNotFound, isLoading } = this.state;
     return (
       <>
         <GlobalStyle />
@@ -83,7 +83,7 @@ export class App extends Component {
         <SearchBar onSubmit={this.handleSearch} />
         <Container>
           <ImageGallery imagesLi={images} />
-          {hasSearched && showNotFound && <NotFound />}
+          {showNotFound && <NotFound />}
 
           {images.length > 0 && (
             <LoadMore

@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { HeaderSearchBarStye } from './Searchbar.styled';
+import { HeaderSearchBarStye } from './SearchBar.styled';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
